@@ -1,0 +1,16 @@
+{
+    "id": 1,
+    "shift": 1,
+    "station": 1,
+    "duration": "2018-09-26T11:57:04.05Z",
+    "time": "9:00:00 AM",
+    "reason": "Test Reason",
+    "updateby": "Ramesh",
+    "updatedatetime": "2018-09-26T11:57:04.05Z",
+    "status": "Completed",
+    "mac": "",
+    "imei": "",
+    "lat": 12.1,
+    "lng": 11.1,
+    "location": "Bangalore"
+}

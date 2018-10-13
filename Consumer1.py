@@ -10,12 +10,12 @@ import os
 import mysql.connector as mysql1
 import datetime
 
+#Connection string
 
 # def info(title):
 #     if hasattr(os, 'getppid'):  # only available on Unix
 #         print('parent process:', os.getppid())
 #     print('process id:', os.getpid())
-
 
 def on_message(chan, method_frame, _header_frame, body, userdata=None):
     """Called when a message is received. Log message and ack it."""
@@ -36,10 +36,9 @@ def on_message(chan, method_frame, _header_frame, body, userdata=None):
     conn.commit()
 
     b = datetime.datetime.now().replace(microsecond=0)
-    print('Message Id:'+ str(data['id']) + ' End Time: ' + str(b))
+    print('Message Id:' + str(data['id']) + ' End Time: ' + str(b))
 
     chan.basic_ack(delivery_tag=method_frame.delivery_tag)
-
 
 def main(cur):
     """Main method."""
@@ -59,21 +58,20 @@ def main(cur):
 
     on_message_callback = functools.partial(
         on_message, userdata='on_message_userdata')
-    
+
     channel.basic_consume(
         on_message_callback,
         'tvsEventsQueue',
     )
     try:
-        print('started consuming')
+        print('Started consuming RabbitMQ')
         channel.start_consuming()
-        print('finished consuming')
+        print('finished consuming RabbitMQ')
 
     except KeyboardInterrupt:
         channel.stop_consuming()
 
     connection.close()
-
 
 if __name__ == '__main__':
     conn = mysql1.connect(
@@ -82,18 +80,20 @@ if __name__ == '__main__':
         user='a2c1fa_uat',
         passwd='bixware123',
         db='db_a2c1fa_uat')
-    print('connected')
-    print(multiprocessing.cpu_count())
     #Connect with mySql DB
     cur = conn.cursor()
-
+    print('Connected to mysql ' + 'CPUCount:' + str(multiprocessing.cpu_count()))
     processes = []
     for i in range(10):
-        t = multiprocessing.Process(target=main(cur), args=(i, ))
+        print('Process:' + str(i))
+        t = multiprocessing.Process(target=main(cur),args=(i,))
+        print(i)
         processes.append(t)
+        print('appended')
         t.start()
 
     for one_process in processes:
+        print(one_process)
         one_process.join()
 
     print("Done!")

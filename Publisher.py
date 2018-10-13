@@ -9,6 +9,9 @@ channel = connection.channel()
 
 # channel.exchange_declare(exchange='amqp.topic',
 #                          exchange_type='topic')
+
+# todo - Map data from CSV to destination protocol format
+
 for i in range(0, 100):
     message = json.dumps({
         "id": i + 1,
